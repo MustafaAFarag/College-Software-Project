@@ -1,7 +1,7 @@
 .worktrees/
 node_modules/
 .next/
-*.db
 *.db-journal
-prisma/dev.db
+prisma/prisma/
 dist/
+tsconfig.tsbuildinfo
