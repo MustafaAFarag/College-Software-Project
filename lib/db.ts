@@ -1,0 +1,6 @@
+import { PrismaClient } from "@prisma/client"
+// Next.js dev hot-reload singleton
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
+function createPrismaClient() { return new PrismaClient() }
+export const db = globalForPrisma.prisma ?? createPrismaClient()
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db

@@ -1,0 +1,157 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(STUDENT)
+  studentId    String?  @unique
+  department   String?
+
+  enrollments      Enrollment[]
+  overrideRequests OverrideRequest[] @relation("StudentOverrides")
+  advisedOverrides OverrideRequest[] @relation("AdvisorOverrides")
+  taughtSections   Section[]
+  auditActions     AuditLog[]
+
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  STUDENT
+  ADVISOR
+  ADMIN
+  INSTRUCTOR
+}
+
+model Term {
+  id           String   @id @default(cuid())
+  code         String   @unique
+  label        String
+  startDate    DateTime
+  endDate      DateTime
+  regOpensAt   DateTime
+  regClosesAt  DateTime
+  dropClosesAt DateTime
+  isActive     Boolean  @default(false)
+
+  sections Section[]
+}
+
+model Department {
+  id   String @id @default(cuid())
+  code String @unique
+  name String
+
+  courses Course[]
+}
+
+model Course {
+  id           String @id @default(cuid())
+  code         String @unique
+  title        String
+  creditHours  Int
+  level        Int
+  departmentId String
+
+  department    Department     @relation(fields: [departmentId], references: [id])
+  sections      Section[]
+  prerequisites Prerequisite[] @relation("CoursePrereqs")
+  requiredBy    Prerequisite[] @relation("RequiredFor")
+}
+
+model Prerequisite {
+  courseId         String
+  requiredCourseId String
+
+  course         Course @relation("CoursePrereqs", fields: [courseId], references: [id])
+  requiredCourse Course @relation("RequiredFor", fields: [requiredCourseId], references: [id])
+
+  @@id([courseId, requiredCourseId])
+}
+
+model Section {
+  id             String  @id @default(cuid())
+  courseId       String
+  termId         String
+  instructorId   String?
+  instructorName String?
+  groupLabel     String?
+  capacity       Int
+  scheduleJson   String
+
+  course      Course  @relation(fields: [courseId], references: [id])
+  term        Term    @relation(fields: [termId], references: [id])
+  instructor  User?   @relation(fields: [instructorId], references: [id])
+
+  enrollments      Enrollment[]
+  overrideRequests OverrideRequest[]
+}
+
+model Enrollment {
+  id          String          @id @default(cuid())
+  studentId   String
+  sectionId   String
+  state       EnrollmentState @default(PENDING)
+  waitlistPos Int?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  student  User    @relation(fields: [studentId], references: [id])
+  section  Section @relation(fields: [sectionId], references: [id])
+  auditLog AuditLog[]
+
+  @@unique([studentId, sectionId])
+}
+
+enum EnrollmentState {
+  PENDING
+  ENROLLED
+  WAITLISTED
+  DROPPED
+  COMPLETED
+  CANCELLED
+}
+
+model OverrideRequest {
+  id        String         @id @default(cuid())
+  studentId String
+  sectionId String
+  reason    String
+  status    OverrideStatus @default(PENDING)
+  advisorId String?
+  decidedAt DateTime?
+  createdAt DateTime       @default(now())
+
+  student User    @relation("StudentOverrides", fields: [studentId], references: [id])
+  advisor User?   @relation("AdvisorOverrides", fields: [advisorId], references: [id])
+  section Section @relation(fields: [sectionId], references: [id])
+}
+
+enum OverrideStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model AuditLog {
+  id           String   @id @default(cuid())
+  enrollmentId String?
+  actorId      String
+  fromState    String?
+  toState      String
+  action       String
+  metaJson     String?
+  at           DateTime @default(now())
+
+  enrollment Enrollment? @relation(fields: [enrollmentId], references: [id])
+  actor      User        @relation(fields: [actorId], references: [id])
+}

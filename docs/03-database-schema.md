@@ -193,7 +193,7 @@ These are constants in `lib/validator.ts`.
 ## Seed Data Plan
 
 Seed script creates:
-- **3 users:** `student@alex.edu` (STUDENT), `advisor@alex.edu` (ADVISOR), `admin@alex.edu` (ADMIN) — all password `demo1234`
+- **4 demo users:** `student@alex.edu` (STUDENT), `advisor@alex.edu` (ADVISOR), `instructor@alex.edu` (INSTRUCTOR), `admin@alex.edu` (ADMIN) — all password `demo1234`
 - **1 department:** CS
 - **10 courses:** CS101, CS102, CS201, CS202, CS301, CS302, CS401, CS402, MATH101, MATH201
 - **Prerequisites:** CS201 requires CS101; CS301 requires CS201; CS302 requires CS201; CS401 requires CS301
