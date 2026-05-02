@@ -148,12 +148,13 @@ export function ScheduleGrid({ enrollments, dropClosesAt }: { enrollments: Enrol
       ) : (
         <>
           <div style={{ overflowX: "auto" }}>
-            <div style={{ display: "grid", gridTemplateColumns: `68px repeat(5, minmax(130px, 1fr))`, minWidth: "740px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: `68px repeat(5, minmax(130px, 1fr))`, gridTemplateRows: `auto repeat(${SLOT_COUNT}, ${ROW_HEIGHT_PX}px)`, minWidth: "740px" }}>
 
               {/* Header */}
-              <div style={{ background: "var(--bg-page)" }} />
-              {DAYS.map(d => (
+              <div style={{ background: "var(--bg-page)", gridColumn: 1, gridRow: 1 }} />
+              {DAYS.map((d, i) => (
                 <div key={d} style={{
+                  gridColumn: i + 2, gridRow: 1,
                   textAlign: "center", padding: "10px 4px", fontSize: "11px", fontWeight: 600,
                   color: "var(--text-muted)", borderBottom: "2px solid var(--border)",
                   letterSpacing: "0.08em", textTransform: "uppercase",
@@ -166,137 +167,156 @@ export function ScheduleGrid({ enrollments, dropClosesAt }: { enrollments: Enrol
                 const isHour = row % 2 === 0
                 return (
                   <React.Fragment key={row}>
-                    {/* Time label — sticky left column, centered vertically so the label aligns with the hour line */}
+                    {/* Time label — text translated up 50% so it straddles the top border = aligns with hour line */}
                     <div
                       key={`tl-${row}`}
                       style={{
                         gridColumn: 1,
+                        gridRow: row + 2,
                         height: ROW_HEIGHT_PX,
                         position: "sticky",
                         left: 0,
                         zIndex: 4,
                         background: "var(--bg-page)",
                         display: "flex",
-                        alignItems: "center",
+                        alignItems: "flex-start",
                         justifyContent: "flex-end",
                         paddingRight: "10px",
-                        fontSize: "10px",
-                        fontWeight: isHour ? 600 : 400,
-                        color: isHour ? "var(--text-muted)" : "transparent",
+                        borderTop: isHour && row > 0 ? "1px solid var(--border)" : "none",
                         borderRight: "1px solid var(--border)",
                         userSelect: "none",
-                        fontVariantNumeric: "tabular-nums",
                         boxSizing: "border-box",
+                        overflow: "visible",
                       }}
                     >
-                      {slotToLabel(row)}
+                      {isHour && (
+                        <span style={{
+                          fontSize: "10px",
+                          fontWeight: 600,
+                          color: "var(--text-muted)",
+                          fontVariantNumeric: "tabular-nums",
+                          transform: row === 0 ? "translateY(2px)" : "translateY(-50%)",
+                          lineHeight: 1,
+                          whiteSpace: "nowrap",
+                          position: "relative",
+                          top: 0,
+                          zIndex: 5,
+                          background: "var(--bg-page)",
+                          paddingLeft: "2px",
+                        }}>
+                          {slotToLabel(row)}
+                        </span>
+                      )}
                     </div>
 
-                    {DAYS.map(day => {
-                      const block = active.find(e => {
-                        const slots = JSON.parse(e.scheduleJson) as { day: string; startTime: string; endTime: string }[]
-                        return slots.some(s => s.day === day && timeToSlot(s.startTime) === row)
-                      })
-
-                      if (block) {
-                        const slots = JSON.parse(block.scheduleJson) as { day: string; startTime: string; endTime: string; room?: string }[]
-                        const slot = slots.find(s => s.day === day && timeToSlot(s.startTime) === row)!
-                        const span = timeToSlot(slot.endTime) - timeToSlot(slot.startTime)
-                        const pal = hashPalette(block.courseCode)
-                        const isWaitlisted = block.state === "WAITLISTED"
-
-                        return (
-                          <div
-                            key={`${day}-${row}-block`}
-                            className="sched-block"
-                            style={{
-                              gridRow: `span ${span}`,
-                              background: isWaitlisted ? pal.light : pal.bg,
-                              border: `1.5px solid ${pal.bg}`,
-                              borderRadius: "6px",
-                              padding: "6px 8px 6px 8px",
-                              fontSize: "11px",
-                              color: isWaitlisted ? "var(--text-primary)" : "white",
-                              overflow: "hidden",
-                              position: "relative",
-                              margin: "2px",
-                              minHeight: SLOT_HEIGHT * span - 4,
-                              animation: "schedFadeIn 0.25s ease",
-                            }}
-                          >
-                            {/* Time */}
-                            <div style={{
-                              fontSize: "10px", fontWeight: 700, marginBottom: "4px",
-                              background: isWaitlisted ? "rgba(0,0,0,0.12)" : "rgba(0,0,0,0.28)", borderRadius: "3px",
-                              padding: "1px 5px", display: "inline-block", letterSpacing: "0.02em",
-                              color: isWaitlisted ? "var(--text-primary)" : "white",
-                            }}>
-                              {slot.startTime} – {slot.endTime}
-                            </div>
-
-                            <div style={{ fontWeight: 700, fontSize: "12px", lineHeight: 1.3 }}>{block.courseCode}</div>
-
-                            {span >= 3 && (
-                              <div style={{ fontSize: "10px", opacity: 0.85, marginTop: "2px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                                {block.courseTitle}
-                              </div>
-                            )}
-
-                            {block.groupLabel && (
-                              <div style={{ fontSize: "10px", fontWeight: 700, marginTop: "2px", background: "rgba(0,0,0,0.2)", borderRadius: "3px", padding: "1px 4px", display: "inline-block" }}>
-                                {block.groupLabel}
-                              </div>
-                            )}
-
-                            {block.instructor && span >= 3 && (
-                              <div style={{ fontSize: "10px", opacity: 0.8, marginTop: "3px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                                {block.instructor}
-                              </div>
-                            )}
-
-                            {slot.room && (
-                              <div style={{ fontSize: "9px", opacity: 0.6, marginTop: "2px" }}>{slot.room}</div>
-                            )}
-
-                            {isWaitlisted && (
-                              <div style={{ fontSize: "9px", fontWeight: 700, marginTop: "3px", background: "rgba(251,191,36,0.25)", color: "#fbbf24", borderRadius: "3px", padding: "1px 4px", display: "inline-block", border: "1px solid rgba(251,191,36,0.4)" }}>
-                                WAITLIST
-                              </div>
-                            )}
-
-                            {canDrop && (
-                              <button
-                                className="drop-btn"
-                                onClick={() => setConfirm(block.id)}
-                                title="Drop course"
-                                style={{
-                                  position: "absolute", top: "4px", right: "4px",
-                                  background: "rgba(0,0,0,0.45)", border: "none",
-                                  borderRadius: "4px", color: "white", fontSize: "12px",
-                                  cursor: "pointer", padding: "1px 5px", lineHeight: 1.4,
-                                }}
-                              >
-                                ×
-                              </button>
-                            )}
-                          </div>
-                        )
-                      }
-
-                      return (
-                        <div
-                          key={`${day}-${row}-empty`}
-                          style={{
-                            height: ROW_HEIGHT_PX,
-                            boxSizing: "border-box",
-                            borderBottom: isHour ? "1px solid var(--border-subtle)" : "1px solid rgba(255,255,255,0.025)",
-                            borderRight: "1px solid var(--border-subtle)",
-                          }}
-                        />
-                      )
-                    })}
+                    {DAYS.map((day, dIdx) => (
+                      <div
+                        key={`${day}-${row}-empty`}
+                        style={{
+                          gridColumn: dIdx + 2,
+                          gridRow: row + 2,
+                          height: ROW_HEIGHT_PX,
+                          boxSizing: "border-box",
+                          borderTop: isHour && row > 0 ? "1px solid var(--border)" : "none",
+                          borderBottom: !isHour ? "1px solid rgba(255,255,255,0.04)" : "none",
+                          borderRight: "1px solid var(--border-subtle)",
+                        }}
+                      />
+                    ))}
                   </React.Fragment>
                 )
+              })}
+
+              {/* Course Blocks overlay */}
+              {active.flatMap(block => {
+                const slots = JSON.parse(block.scheduleJson) as { day: string; startTime: string; endTime: string; room?: string }[]
+                const pal = hashPalette(block.courseCode)
+                const isWaitlisted = block.state === "WAITLISTED"
+
+                return slots.map((slot, sIdx) => {
+                  const startRow = timeToSlot(slot.startTime)
+                  const span = timeToSlot(slot.endTime) - startRow
+                  const col = DAYS.indexOf(slot.day) + 2
+
+                  return (
+                    <div
+                      key={`${block.id}-${sIdx}`}
+                      className="sched-block"
+                      style={{
+                        gridColumn: col,
+                        gridRow: `${startRow + 2} / span ${span}`,
+                        background: isWaitlisted ? pal.light : pal.bg,
+                        border: `1.5px solid ${pal.bg}`,
+                        borderRadius: "6px",
+                        padding: "6px 8px 6px 8px",
+                        fontSize: "11px",
+                        color: isWaitlisted ? "var(--text-primary)" : "white",
+                        overflow: "hidden",
+                        position: "relative",
+                        margin: "2px",
+                        minHeight: SLOT_HEIGHT * span - 4,
+                        animation: "schedFadeIn 0.25s ease",
+                        zIndex: 10,
+                      }}
+                    >
+                      {/* Time */}
+                      <div style={{
+                        fontSize: "10px", fontWeight: 700, marginBottom: "4px",
+                        background: isWaitlisted ? "rgba(0,0,0,0.12)" : "rgba(0,0,0,0.28)", borderRadius: "3px",
+                        padding: "1px 5px", display: "inline-block", letterSpacing: "0.02em",
+                        color: isWaitlisted ? "var(--text-primary)" : "white",
+                      }}>
+                        {slot.startTime} – {slot.endTime}
+                      </div>
+
+                      <div style={{ fontWeight: 700, fontSize: "12px", lineHeight: 1.3 }}>{block.courseCode}</div>
+
+                      {span >= 3 && (
+                        <div style={{ fontSize: "10px", opacity: 0.85, marginTop: "2px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          {block.courseTitle}
+                        </div>
+                      )}
+
+                      {block.groupLabel && (
+                        <div style={{ fontSize: "10px", fontWeight: 700, marginTop: "2px", background: "rgba(0,0,0,0.2)", borderRadius: "3px", padding: "1px 4px", display: "inline-block" }}>
+                          {block.groupLabel}
+                        </div>
+                      )}
+
+                      {block.instructor && span >= 3 && (
+                        <div style={{ fontSize: "10px", opacity: 0.8, marginTop: "3px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          {block.instructor}
+                        </div>
+                      )}
+
+                      {slot.room && (
+                        <div style={{ fontSize: "9px", opacity: 0.6, marginTop: "2px" }}>{slot.room}</div>
+                      )}
+
+                      {isWaitlisted && (
+                        <div style={{ fontSize: "9px", fontWeight: 700, marginTop: "3px", background: "rgba(251,191,36,0.25)", color: "#fbbf24", borderRadius: "3px", padding: "1px 4px", display: "inline-block", border: "1px solid rgba(251,191,36,0.4)" }}>
+                          WAITLIST
+                        </div>
+                      )}
+
+                      {canDrop && (
+                        <button
+                          className="drop-btn"
+                          onClick={() => setConfirm(block.id)}
+                          title="Drop course"
+                          style={{
+                            position: "absolute", top: "4px", right: "4px",
+                            background: "rgba(0,0,0,0.45)", border: "none",
+                            borderRadius: "4px", color: "white", fontSize: "12px",
+                            cursor: "pointer", padding: "1px 5px", lineHeight: 1.4,
+                          }}
+                        >
+                          ×
+                        </button>
+                      )}
+                    </div>
+                  )
+                })
               })}
             </div>
           </div>
