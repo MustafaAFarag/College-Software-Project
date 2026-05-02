@@ -47,39 +47,31 @@ Students at Alexandria University face a fragmented registration process where t
 
 ```text
 UniReg Project
-|-- 1. Project Management
-|   |-- 1.1 Planning and scheduling
-|   |-- 1.2 Task tracking
-|   `-- 1.3 Team coordination
+|-- 1. Project Initiation & Planning
+|   |-- 1.1 Define project scope and objectives
+|   |-- 1.2 Identify stakeholders
+|   `-- 1.3 Project scheduling and risk management
 |-- 2. Requirements Engineering
-|   |-- 2.1 Elicitation
-|   |-- 2.2 Specification
-|   `-- 2.3 Analysis and validation
-|-- 3. System Modeling
-|   |-- 3.1 Context Diagram
-|   |-- 3.2 Use Case Diagram
-|   |-- 3.3 Activity Diagram
-|   |-- 3.4 State Machine Diagram
-|   |-- 3.5 Gantt Chart
-|   `-- 3.6 PERT Diagram
-|-- 4. System Design
-|   |-- 4.1 Architecture
-|   |-- 4.2 Database schema
-|   `-- 4.3 Interface design
-|-- 5. Implementation
-|   |-- 5.1 Authentication and role routing
-|   |-- 5.2 Student registration flow
-|   |-- 5.3 Waitlist and drop flow
-|   |-- 5.4 Advisor override workflow
-|   |-- 5.5 Admin management features
-|   `-- 5.6 Transcript and audit log
-|-- 6. Testing
-|   |-- 6.1 Validator tests
-|   `-- 6.2 Demo smoke tests
-|-- 7. Documentation
-|   |-- 7.1 Final report assembly
-|   `-- 7.2 Diagram exports
-`-- 8. Demo and Video
-    |-- 8.1 Demo seed preparation
-    `-- 8.2 Final video recording
+|   |-- 2.1 Stakeholder elicitation
+|   |-- 2.2 Requirements specification (FRs & NFRs)
+|   `-- 2.3 Requirements validation
+|-- 3. System Design
+|   |-- 3.1 Architectural design
+|   |-- 3.2 Database schema design
+|   |-- 3.3 UI/UX wireframing
+|   `-- 3.4 System Modeling (UML Diagrams)
+|-- 4. System Implementation
+|   |-- 4.1 Database setup and migrations
+|   |-- 4.2 Core Validator Logic & Backend APIs
+|   |-- 4.3 Student Portal (Registration, Schedule)
+|   |-- 4.4 Admin & Advisor Portals
+|   `-- 4.5 Waitlist engine & Audit logging
+|-- 5. Testing & Quality Assurance
+|   |-- 5.1 Unit testing (Registration rules)
+|   |-- 5.2 System integration testing
+|   `-- 5.3 User Acceptance Testing (UAT)
+`-- 6. Deployment & Handover
+    |-- 6.1 Production deployment
+    |-- 6.2 User manuals & documentation
+    `-- 6.3 Stakeholder training
 ```

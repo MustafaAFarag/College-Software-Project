@@ -55,41 +55,33 @@ Students at Alexandria University register for courses through a process that do
 
 ```
 UniReg Project
-├── 1. Project Management
-│   ├── 1.1 Planning and scheduling
-│   ├── 1.2 Task tracking
-│   └── 1.3 Team coordination
+├── 1. Project Initiation & Planning
+│   ├── 1.1 Define project scope and objectives
+│   ├── 1.2 Identify stakeholders
+│   └── 1.3 Project scheduling and risk management
 ├── 2. Requirements Engineering
-│   ├── 2.1 Elicitation
-│   ├── 2.2 Specification
-│   └── 2.3 Analysis and validation
-├── 3. System Modeling
-│   ├── 3.1 Context Diagram
-│   ├── 3.2 Use Case Diagram
-│   ├── 3.3 Activity Diagram
-│   ├── 3.4 State Machine Diagram
-│   ├── 3.5 Gantt Chart
-│   └── 3.6 PERT Diagram
-├── 4. System Design
-│   ├── 4.1 Architecture
-│   ├── 4.2 Database schema
-│   └── 4.3 Interface design
-├── 5. Implementation
-│   ├── 5.1 Authentication and role routing
-│   ├── 5.2 Student registration flow
-│   ├── 5.3 Waitlist and drop flow
-│   ├── 5.4 Advisor override workflow
-│   ├── 5.5 Admin management features
-│   └── 5.6 Transcript and audit log
-├── 6. Testing
-│   ├── 6.1 Validator unit tests
-│   └── 6.2 Demo smoke tests
-├── 7. Documentation
-│   ├── 7.1 Final report assembly
-│   └── 7.2 Diagram exports
-└── 8. Demo and Video
-    ├── 8.1 Demo seed preparation
-    └── 8.2 Final video recording
+│   ├── 2.1 Stakeholder elicitation
+│   ├── 2.2 Requirements specification (FRs & NFRs)
+│   └── 2.3 Requirements validation
+├── 3. System Design
+│   ├── 3.1 Architectural design
+│   ├── 3.2 Database schema design
+│   ├── 3.3 UI/UX wireframing
+│   └── 3.4 System Modeling (UML Diagrams)
+├── 4. System Implementation
+│   ├── 4.1 Database setup and migrations
+│   ├── 4.2 Core Validator Logic & Backend APIs
+│   ├── 4.3 Student Portal (Registration, Schedule)
+│   ├── 4.4 Admin & Advisor Portals
+│   └── 4.5 Waitlist engine & Audit logging
+├── 5. Testing & Quality Assurance
+│   ├── 5.1 Unit testing (Registration rules)
+│   ├── 5.2 System integration testing
+│   └── 5.3 User Acceptance Testing (UAT)
+└── 6. Deployment & Handover
+    ├── 6.1 Production deployment
+    ├── 6.2 User manuals & documentation
+    └── 6.3 Stakeholder training
 ```
 
 ---
@@ -167,7 +159,7 @@ Each model below has one short paragraph for **why we use it** and one for **how
 
 ## 3.1 Context Diagram
 
-> **[INSERT DIAGRAM HERE: `docs/exports/01-context.png` — Context Diagram]**
+![Context Diagram](./exports/01-context.png)
 
 **Why used.** Shows the system boundary in one picture. We see what is inside UniReg and what is outside, and which actors send or receive data.
 
@@ -175,7 +167,7 @@ Each model below has one short paragraph for **why we use it** and one for **how
 
 ## 3.2 Use Case Diagram
 
-> **[INSERT DIAGRAM HERE: `docs/exports/02-usecase.png` — Use Case Diagram]**
+![Use Case Diagram](./exports/02-usecase.png)
 
 **Why used.** Lists every action a user can take. `include` and `extend` show how actions depend on each other (for example, `Register for Section` includes `Validate Enrollment`, and `Request Override` extends it when the validation blocks the student).
 
@@ -183,7 +175,7 @@ Each model below has one short paragraph for **why we use it** and one for **how
 
 ## 3.3 Activity Diagram
 
-> **[INSERT DIAGRAM HERE: `docs/exports/03-activity.png` — Activity Diagram]**
+![Activity Diagram](./exports/03-activity.png)
 
 **Why used.** Shows the registration and drop flows step by step in two swimlanes (Student | System). Captures the order of the validator checks: window → duplicate → prerequisite → clash → credit cap → capacity.
 
@@ -191,7 +183,7 @@ Each model below has one short paragraph for **why we use it** and one for **how
 
 ## 3.4 State Machine Diagram (Bonus)
 
-> **[INSERT DIAGRAM HERE: `docs/exports/04-statemachine.png` — State Machine Diagram]**
+![State Machine Diagram](./exports/04-statemachine.png)
 
 **Why used.** Shows the lifecycle of one Enrollment record: ENROLLED, WAITLISTED, DROPPED, COMPLETED, and the transitions between them.
 
@@ -199,7 +191,7 @@ Each model below has one short paragraph for **why we use it** and one for **how
 
 ## 3.5 Gantt Chart
 
-> **[INSERT DIAGRAM HERE: `docs/exports/05-gantt.png` — Gantt Chart]**
+![Gantt Chart](./exports/05-gantt.png)
 
 **Why used.** Shows the planned timeline for each WBS task and who owns it.
 
@@ -207,11 +199,11 @@ Each model below has one short paragraph for **why we use it** and one for **how
 
 ## 3.6 PERT Diagram
 
-> **[INSERT DIAGRAM HERE: `docs/exports/06-pert.png` — PERT Diagram]**
+![PERT Diagram](./exports/06-pert.png)
 
 **Why used.** Shows the order between tasks and marks the critical path that must finish on time for the project to ship.
 
-**How it connects.** Uses the same tasks as the Gantt Chart and points to which deliverables (PDF, diagrams sheet, video) are on the critical path.
+**How it connects.** Uses the same tasks as the Gantt Chart and points to which deliverables (Implementation, Testing, Deployment) are on the critical path.
 
 ---
 
@@ -250,8 +242,6 @@ prisma/schema.prisma        database schema
 ## 4.3 Database Summary
 
 The schema has six main tables: `User`, `Term`, `Course`, `Section`, `Enrollment`, `OverrideRequest`, plus an `AuditLog` table. Enrollments hold the state (`ENROLLED`, `WAITLISTED`, `DROPPED`, `COMPLETED`). Sections store their schedule as a small JSON array of day + start/end + room.
-
-> **[OPTIONAL: INSERT ER DIAGRAM HERE if exported separately]**
 
 ## 4.4 Feature Walkthrough (FR1–FR12)
 

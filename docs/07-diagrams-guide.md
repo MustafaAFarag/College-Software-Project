@@ -92,11 +92,11 @@ Captures the exact decision path for the most important business flow.
 
 ## Page 5 - Gantt Chart
 
-Use the WBS tasks from `01-project-overview.md` and show the planned schedule for requirements, diagrams, implementation, testing, PDF assembly, and video recording.
+Use the real-world SDLC WBS tasks from `01-project-overview.md` (Project Initiation, Requirements Engineering, System Design, Implementation, Testing, Deployment) and show the planned schedule for developing the UniReg software system.
 
 ## Page 6 - PERT Diagram
 
-Use the same tasks as the Gantt chart and highlight the critical path that leads to the final report and video delivery.
+Use the same SDLC tasks as the Gantt chart and highlight the critical path that leads from project initiation to the final production deployment and handover.
 
 ## Diagram Export Checklist
 

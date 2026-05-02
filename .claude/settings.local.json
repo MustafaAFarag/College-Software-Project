@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(npx tsc *)",
-      "Bash(xargs grep *)"
+      "Bash(xargs grep *)",
+      "Bash(cmd /c \"dir /b \\\\\"j:\\\\Personal Projects\\\\College\\\\Software Project\\\\docs\\\\\"\")",
+      "Bash(cmd /c dir /b \"j:\\\\Personal Projects\\\\College\\\\Software Project\\\\docs\")"
     ]
   }
 }
