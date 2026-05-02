@@ -95,6 +95,7 @@ export function TermsClient({ terms: initial }: { terms: Term[] }) {
   const [editForm, setEditForm] = useState<TermForm>(emptyForm())
   const [saving, setSaving] = useState<"create" | string | null>(null)
   const [activating, setActivating] = useState<string | null>(null)
+  const [confirmActivate, setConfirmActivate] = useState<string | null>(null)
 
   const sortedTerms = useMemo(
     () => [...terms].sort((a, b) => +new Date(b.startDate) - +new Date(a.startDate)),
@@ -102,7 +103,7 @@ export function TermsClient({ terms: initial }: { terms: Term[] }) {
   )
 
   async function activate(id: string) {
-    if (!confirm("This will deactivate all other terms. Continue?")) return
+    setConfirmActivate(null)
     setActivating(id)
     try {
       const res = await fetch(`/api/admin/terms/${id}`, {
@@ -306,9 +307,19 @@ export function TermsClient({ terms: initial }: { terms: Term[] }) {
                       Edit
                     </button>
                     {!term.isActive && (
-                      <button onClick={() => activate(term.id)} disabled={activating === term.id} style={primaryButton}>
-                        {activating === term.id ? <><Spinner size={11} color="white" /> Activating...</> : "Set Active"}
-                      </button>
+                      confirmActivate === term.id ? (
+                        <>
+                          <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>Deactivates all others.</span>
+                          <button onClick={() => activate(term.id)} disabled={activating === term.id} style={{ ...primaryButton, background: "#ef4444" }}>
+                            {activating === term.id ? <><Spinner size={11} color="white" /> Activating...</> : "Confirm"}
+                          </button>
+                          <button onClick={() => setConfirmActivate(null)} style={secondaryButton}>Cancel</button>
+                        </>
+                      ) : (
+                        <button onClick={() => setConfirmActivate(term.id)} style={primaryButton}>
+                          Set Active
+                        </button>
+                      )
                     )}
                   </div>
                 </td>

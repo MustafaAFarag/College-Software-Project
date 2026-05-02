@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-**UniReg** — University Course Registration System. Alexandria University Software Engineering final project. Full-stack web app (Next.js 15 + Prisma + SQLite). See [docs/00-INDEX.md](docs/00-INDEX.md) for the full doc map.
+**UniReg** — University Course Registration System. Alexandria University Software Engineering final project. Full-stack web app (Next.js 16 + React 19 + Prisma 6 + SQLite). See [docs/00-INDEX.md](docs/00-INDEX.md) for the full doc map.
 
 ## Commands
 
@@ -41,7 +41,7 @@ NEXTAUTH_URL="http://localhost:3000"
 
 ## Architecture
 
-**Stack:** Next.js 15 App Router · TypeScript · Prisma ORM · SQLite · NextAuth v5 (credentials) · Tailwind + shadcn/ui · Zod · @react-pdf/renderer · Vitest
+**Stack:** Next.js 16 App Router · React 19 · TypeScript · Prisma 6 (SQLite) · NextAuth v5 beta (credentials) · Tailwind v4 · react-toastify · Zod 4 · @react-pdf/renderer · Vitest 4
 
 **Repo layout** (target state):
 ```

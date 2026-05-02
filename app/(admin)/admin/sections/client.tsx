@@ -25,6 +25,7 @@ type SectionForm = {
   termId: string
   capacity: string
   instructorId: string
+  groupLabel: string
   slots: Slot[]
 }
 
@@ -46,6 +47,7 @@ function emptyForm(activeTermId: string | null): SectionForm {
     termId: activeTermId ?? "",
     capacity: "20",
     instructorId: "",
+    groupLabel: "",
     slots: [{ day: "SUN", startTime: "09:00", endTime: "10:30", room: "" }],
   }
 }
@@ -95,6 +97,13 @@ export function SectionsClient({
     }))
   }
 
+  function removeSlot(updater: Dispatch<SetStateAction<SectionForm>>, index: number) {
+    updater((form) => ({
+      ...form,
+      slots: form.slots.filter((_, i) => i !== index),
+    }))
+  }
+
   function validateSlots(slots: Slot[]) {
     return slots.every((slot) => slot.endTime > slot.startTime)
   }
@@ -130,6 +139,7 @@ export function SectionsClient({
           capacity: parseInt(createForm.capacity),
           scheduleJson: JSON.stringify(createForm.slots),
           instructorId: createForm.instructorId || undefined,
+          groupLabel: createForm.groupLabel || undefined,
         }),
       })
       const data = await res.json()
@@ -175,6 +185,7 @@ export function SectionsClient({
           capacity: parseInt(editForm.capacity),
           scheduleJson: JSON.stringify(editForm.slots),
           instructorId: editForm.instructorId || null,
+          groupLabel: editForm.groupLabel || null,
         }),
       })
       const data = await res.json()
@@ -202,6 +213,7 @@ export function SectionsClient({
       termId: section.termId,
       capacity: String(section.capacity),
       instructorId: section.instructorId ?? "",
+      groupLabel: section.groupLabel ?? "",
       slots: parseSlots(section.scheduleJson),
     })
   }
@@ -230,6 +242,7 @@ export function SectionsClient({
             instructors={instructors}
             days={days}
             addSlot={() => addSlot(setCreateForm)}
+            removeSlot={(index) => removeSlot(setCreateForm, index)}
             setSlot={(index, key, value) => setSlot(setCreateForm, index, key, value)}
           />
           <button type="submit" disabled={saving === "create"} style={primaryButton}>
@@ -251,6 +264,7 @@ export function SectionsClient({
             readOnlyCourse
             readOnlyTerm
             addSlot={() => addSlot(setEditForm)}
+            removeSlot={(index) => removeSlot(setEditForm, index)}
             setSlot={(index, key, value) => setSlot(setEditForm, index, key, value)}
           />
           <div style={{ display: "flex", gap: "8px" }}>
@@ -309,6 +323,7 @@ function SectionFormFields({
   instructors,
   days,
   addSlot,
+  removeSlot,
   setSlot,
   readOnlyCourse,
   readOnlyTerm,
@@ -320,6 +335,7 @@ function SectionFormFields({
   instructors: { id: string; name: string }[]
   days: string[]
   addSlot: () => void
+  removeSlot: (index: number) => void
   setSlot: (index: number, key: keyof Slot, value: string) => void
   readOnlyCourse?: boolean
   readOnlyTerm?: boolean
@@ -351,6 +367,10 @@ function SectionFormFields({
             {instructors.map((instructor) => <option key={instructor.id} value={instructor.id}>{instructor.name}</option>)}
           </select>
         </label>
+        <label style={{ ...labelStyle, gridColumn: "1 / -1" }}>
+          Group Label <span style={{ opacity: 0.5 }}>(optional, e.g. "A", "B")</span>
+          <input value={form.groupLabel} onChange={(e) => setForm((current) => ({ ...current, groupLabel: e.target.value }))} placeholder="Leave blank if not applicable" style={inputStyle} />
+        </label>
       </div>
 
       <div style={{ marginBottom: "12px" }}>
@@ -363,6 +383,15 @@ function SectionFormFields({
             <input type="time" value={slot.startTime} onChange={(e) => setSlot(index, "startTime", e.target.value)} style={{ ...inputStyle, marginTop: 0 }} />
             <input type="time" value={slot.endTime} onChange={(e) => setSlot(index, "endTime", e.target.value)} style={{ ...inputStyle, marginTop: 0 }} />
             <input type="text" value={slot.room} onChange={(e) => setSlot(index, "room", e.target.value)} placeholder="Room" style={{ ...inputStyle, marginTop: 0 }} />
+            <button
+              type="button"
+              onClick={() => removeSlot(index)}
+              disabled={form.slots.length <= 1}
+              title="Remove slot"
+              style={{ flexShrink: 0, background: "transparent", border: "1px solid var(--border)", borderRadius: "6px", color: form.slots.length <= 1 ? "var(--text-muted)" : "#f87171", padding: "8px 10px", fontSize: "13px", cursor: form.slots.length <= 1 ? "not-allowed" : "pointer", opacity: form.slots.length <= 1 ? 0.4 : 1 }}
+            >
+              ×
+            </button>
           </div>
         ))}
         <button type="button" onClick={addSlot} style={secondaryButton}>+ Add Slot</button>

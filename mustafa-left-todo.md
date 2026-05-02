@@ -1,105 +1,78 @@
-# Mustafa Left To Do
+# Mustafa — Left To Do (Submission Deadline 2026-05-06)
 
-This file lists only the manual steps left before final submission.
+Repo + docs aligned with rubric. All FR1–FR12 routes implemented, 6 diagram pages drafted in `docs/UniReg-Diagrams.drawio`, all 11 doc files complete. Remaining work is **export + assemble + record** — no code/spec gaps.
 
-## 1. Finalize the diagrams
+---
 
-- Open `docs/UniReg-Diagrams.drawio`.
-- Confirm it has exactly 6 pages:
-  - Context Diagram
-  - Use Case Diagram
-  - Activity Diagram
-  - State Machine Diagram
-  - Gantt Chart
-  - PERT Diagram
-- Make sure the actor names match the report:
-  - Student
-  - Academic Advisor
-  - Admin / Registrar
-  - Instructor
-- Make sure the state machine uses the demo states only:
-  - ENROLLED
-  - WAITLISTED
-  - DROPPED
-  - COMPLETED
-- Export each page as PNG.
-- Export the full file as the diagrams sheet PDF.
+## 1. Diagram Exports (blocker for PDF + Diagrams Sheet)
 
-## 2. Assemble the final PDF
+Open `docs/UniReg-Diagrams.drawio` in draw.io desktop or app.diagrams.net.
 
-Use this order:
+- [ ] Export each of the 6 pages as PNG (300 DPI) → `docs/exports/`
+  - `01-context.png`
+  - `02-usecase.png`
+  - `03-activity.png`
+  - `04-statemachine.png`
+  - `05-gantt.png`
+  - `06-pert.png`
+- [ ] Export full file as single PDF → `docs/UniReg-Diagrams.pdf` (this is the **Diagrams Sheet** deliverable)
+- [ ] Sanity check: each page name matches `07-diagrams-guide.md`, font consistent, readable at 100%
 
-1. Cover page
-2. System Description
-3. Requirements Engineering Process
-4. Functional and Non-Functional Requirements
-5. User vs System Requirements
-6. Ambiguities and Conflicts
-7. System Models
-8. System Demo summary
-9. Conclusion
+## 2. Final Structured PDF (main deliverable)
 
-Use these source files:
+Markdown source ready: `docs/UniReg-Final-Report.md`. Output: `UniReg-Final-Report.pdf`.
 
-- `docs/01-project-overview.md`
-- `docs/10-requirements-matrix.md`
-- `docs/07-diagrams-guide.md`
-- `docs/08-pdf-document-structure.md`
-- `docs/02-tech-stack.md`
-- `docs/03-database-schema.md`
-- `docs/04-features-prd.md`
-- `docs/05-api-routes.md`
+- [x] Cover page (title, university, course, 6 team members + IDs, submission date)
+- [x] §1 System Description
+- [x] §2 Requirements Engineering
+  - [x] §2.1 Process (elicit / specify / analyze / validate)
+  - [x] §2.2 FR table (12 rows)
+  - [x] §2.3 NFR table (6 rows)
+  - [x] §2.4 User vs System split
+  - [x] §2.5 Ambiguities table (3 rows)
+  - [x] §2.5 Conflicts table (4 rows)
+- [x] §3 System Models — text + diagram placeholders for all 6 (Context, Use Case, Activity, State Machine, Gantt, PERT)
+- [x] §4 Demo (Bonus) — stack, architecture, DB, FR1–FR12 table, run instructions
+- [x] §5 Conclusion
+- [ ] Insert 6 PNGs at the placeholders (depends on Task 1)
+- [ ] Convert markdown → PDF (Pandoc, Typora, or paste into Word/Docs and export)
 
-## 3. Build the cover page
+Tool suggestion: `pandoc docs/UniReg-Final-Report.md -o UniReg-Final-Report.pdf` after Task 1 PNGs exist.
 
-Put exactly this team list on the cover:
+## 3. Demo Prep (for video + live grading)
 
-- Mostafa Ashraf Saad - 23012069
-- Youssef Sherif Mohamed Samir - 23011187
-- Mohaimen Hany Mohamed - 23011572
-- Albert Atef Shafik - 23011225
-- Mohamed Salama Mohamed Ali El-Gebaly - 23011134
-- Ahmed Salem El-Saeed - 22010019
+- [ ] Run `npx prisma migrate reset && npx prisma db seed` so dataset is fresh
+- [ ] Smoke test all 4 demo accounts (student / advisor / admin / instructor) per `09-video-script.md` Flows A–D
+- [ ] Verify `MATH201-G2` is full so waitlist demo (Flow optional) works
+- [ ] Type check pass: `npx tsc --noEmit`
+- [ ] Tests pass: `npx vitest run`
 
-Also include:
+## 4. Video Recording (per `09-video-script.md`, ≤10 min, ≤100 MB)
 
-- UniReg - University Course Registration System
-- Alexandria University
-- Requirements Engineering and System Modeling
-- Submission date ( don't include it )
+- [ ] Confirm speaker assignments (script lists Person A/B/C — assign team members)
+- [ ] Record at 1080p, H.264 CRF 23, mic on, Chrome at 110% zoom
+- [ ] Cover all 6 segments: Problem · System Desc · Requirements · Diagrams · Live Demo · Conclusion
+- [ ] Cut to ≤10:00
+- [ ] Compress to ≤100 MB (Handbrake preset: Web > Gmail Large 720p30 if needed)
+- [ ] Verify audio clear, all role handoffs visible, all diagrams shown on screen
 
-## 4. Keep the PDF aligned with the real demo
+## 5. Final Submission Bundle
 
-When writing the demo section, use the current seeded story:
+- [ ] `UniReg-Final-Report.pdf` (structured doc)
+- [ ] `UniReg-Diagrams.pdf` (diagrams sheet)
+- [ ] Code repo (zip excluding `node_modules`, `.next`, `dev.db`) OR GitHub link
+- [ ] Demo video (≤100 MB MP4)
+- [ ] README in zip explaining how to run (`npm install` → migrate → seed → dev)
 
-1. Student logs in and already has a current schedule.
-2. Student registers `CS301-G1`.
-3. Student attempts `CS401-G1` and gets blocked.
-4. Student submits an override request.
-5. Advisor approves it.
-6. Admin dashboard shows the new activity.
-7. Student retries and succeeds.
-8. Instructor roster shows the updated student list.
+---
 
-## 5. Record the video
+## Already Done (no action)
 
-- Use `docs/09-video-script.md`.
-- Keep it under 10 minutes.
-- Keep the final exported file under 100 MB.
-- Make sure the handoff between student, advisor, admin, and instructor is visible.
-
-## 6. Final submission check
-
-Before submitting, confirm:
-
-- The PDF uses the same terminology as the diagrams.
-- Every diagram shown in the PDF matches the final `.drawio` export.
-- The FR/NFR counts stay inside the required range.
-- The report explicitly explains why each model is used and how the models connect.
-- The video matches the seeded demo state.
-- The app still runs with the seeded accounts:
-  - `student@alex.edu`
-  - `advisor@alex.edu`
-  - `instructor@alex.edu`
-  - `admin@alex.edu`
-- Password for all demo accounts: `demo1234`
+- ✅ All 11 source docs in `docs/` complete and rubric-aligned
+- ✅ 6-page draw.io file with correct page names
+- ✅ FR1–FR12 routes + APIs implemented (`app/(student|advisor|admin|instructor)/`, `app/api/*`)
+- ✅ Validator + waitlist auto-promotion in `lib/validator.ts`
+- ✅ Transcript PDF generation in `lib/transcript-pdf.tsx`
+- ✅ Audit log + role middleware + seed data
+- ✅ Demo accounts seeded for all 4 roles
+- ✅ Both bonuses covered (State Machine diagram + working coded demo)

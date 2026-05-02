@@ -18,6 +18,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       capacity: z.number().int().positive().optional(),
       scheduleJson: z.string().optional(),
       instructorId: z.string().nullable().optional(),
+      groupLabel: z.string().nullable().optional(),
     }).safeParse(body)
     if (!parsed.success) return NextResponse.json({ error: "Invalid body" }, { status: 400 })
     const section = await db.section.update({ where: { id }, data: parsed.data })

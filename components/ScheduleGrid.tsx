@@ -17,6 +17,7 @@ const DAY_LABELS: Record<string, string> = { SUN: "Sunday", MON: "Monday", TUE: 
 
 const SLOT_COUNT = 20
 const SLOT_HEIGHT = 48
+const ROW_HEIGHT_PX = SLOT_HEIGHT
 
 const PALETTES = [
   { bg: "#5e6ad2", light: "rgba(94,106,210,0.18)" },
@@ -165,27 +166,27 @@ export function ScheduleGrid({ enrollments, dropClosesAt }: { enrollments: Enrol
                 const isHour = row % 2 === 0
                 return (
                   <React.Fragment key={row}>
-                    {/* Time label — sticky left column */}
+                    {/* Time label — sticky left column, centered vertically so the label aligns with the hour line */}
                     <div
                       key={`tl-${row}`}
                       style={{
                         gridColumn: 1,
-                        height: SLOT_HEIGHT,
+                        height: ROW_HEIGHT_PX,
                         position: "sticky",
                         left: 0,
                         zIndex: 4,
                         background: "var(--bg-page)",
                         display: "flex",
-                        alignItems: "flex-start",
+                        alignItems: "center",
                         justifyContent: "flex-end",
                         paddingRight: "10px",
-                        paddingTop: "5px",
                         fontSize: "10px",
                         fontWeight: isHour ? 600 : 400,
                         color: isHour ? "var(--text-muted)" : "transparent",
                         borderRight: "1px solid var(--border)",
                         userSelect: "none",
                         fontVariantNumeric: "tabular-nums",
+                        boxSizing: "border-box",
                       }}
                     >
                       {slotToLabel(row)}
@@ -215,7 +216,7 @@ export function ScheduleGrid({ enrollments, dropClosesAt }: { enrollments: Enrol
                               borderRadius: "6px",
                               padding: "6px 8px 6px 8px",
                               fontSize: "11px",
-                              color: "white",
+                              color: isWaitlisted ? "var(--text-primary)" : "white",
                               overflow: "hidden",
                               position: "relative",
                               margin: "2px",
@@ -226,8 +227,9 @@ export function ScheduleGrid({ enrollments, dropClosesAt }: { enrollments: Enrol
                             {/* Time */}
                             <div style={{
                               fontSize: "10px", fontWeight: 700, marginBottom: "4px",
-                              background: "rgba(0,0,0,0.28)", borderRadius: "3px",
+                              background: isWaitlisted ? "rgba(0,0,0,0.12)" : "rgba(0,0,0,0.28)", borderRadius: "3px",
                               padding: "1px 5px", display: "inline-block", letterSpacing: "0.02em",
+                              color: isWaitlisted ? "var(--text-primary)" : "white",
                             }}>
                               {slot.startTime} – {slot.endTime}
                             </div>
@@ -285,7 +287,8 @@ export function ScheduleGrid({ enrollments, dropClosesAt }: { enrollments: Enrol
                         <div
                           key={`${day}-${row}-empty`}
                           style={{
-                            height: SLOT_HEIGHT,
+                            height: ROW_HEIGHT_PX,
+                            boxSizing: "border-box",
                             borderBottom: isHour ? "1px solid var(--border-subtle)" : "1px solid rgba(255,255,255,0.025)",
                             borderRight: "1px solid var(--border-subtle)",
                           }}

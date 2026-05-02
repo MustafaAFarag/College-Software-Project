@@ -137,7 +137,7 @@ export function AuditLogTable({
               </tr>
             ))}
             {logs.length === 0 && (
-              <tr><td colSpan={5} style={{ textAlign: "center", padding: "40px", color: "var(--text-muted)", fontSize: "14px" }}>No logs</td></tr>
+              <tr><td colSpan={5} style={{ textAlign: "center", padding: "30px 16px", color: "var(--text-muted)", fontSize: "13px" }}>No logs</td></tr>
             )}
           </tbody>
         </table>

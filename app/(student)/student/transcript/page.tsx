@@ -76,7 +76,9 @@ export default async function TranscriptPage() {
       ))}
 
       {byTerm.size === 0 && (
-        <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "40px", fontSize: "14px" }}>No enrollment history</div>
+        <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "60px 40px", fontSize: "13px", background: "rgba(255,255,255,0.01)", border: "1px solid var(--border)", borderRadius: "8px" }}>
+          No enrollment history
+        </div>
       )}
 
       <div style={{ marginTop: "16px", fontSize: "13px", color: "var(--text-muted)" }}>

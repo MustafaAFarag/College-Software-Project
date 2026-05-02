@@ -105,7 +105,13 @@ export function CourseBrowser({ sections, departments, enrollmentMap: initialMap
         <select value={day} onChange={e => setDay(e.target.value)}
           style={{ background: "rgba(255,255,255,0.04)", border: "1px solid var(--border)", borderRadius: "6px", padding: "7px 10px", color: "var(--text-secondary)", fontSize: "13px", outline: "none" }}>
           <option value="">All Days</option>
-          {["SUN", "MON", "TUE", "WED", "THU"].map((value) => <option key={value} value={value}>{value}</option>)}
+          {[
+            { value: "SUN", label: "Sunday" },
+            { value: "MON", label: "Monday" },
+            { value: "TUE", label: "Tuesday" },
+            { value: "WED", label: "Wednesday" },
+            { value: "THU", label: "Thursday" },
+          ].map(({ value, label }) => <option key={value} value={value}>{label}</option>)}
         </select>
         <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", color: "var(--text-secondary)", cursor: "pointer", userSelect: "none" }}>
           <input type="checkbox" checked={availOnly} onChange={e => setAvailOnly(e.target.checked)} />
@@ -174,7 +180,7 @@ export function CourseBrowser({ sections, departments, enrollmentMap: initialMap
                 </div>
 
                 {/* Action button */}
-                <div style={{ flexShrink: 0, textAlign: "right", minWidth: 90 }}>
+                <div style={{ flexShrink: 0, display: "flex", justifyContent: "flex-end", minWidth: 90 }}>
                   {enr ? (
                     <div>
                       {enr.state === "ENROLLED" && (

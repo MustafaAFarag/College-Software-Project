@@ -57,7 +57,7 @@ export default async function AdminDashboard() {
         )}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", gap: "16px", marginBottom: "24px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "16px", marginBottom: "24px" }}>
         {stats.map((stat) => (
           <div key={stat.label} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border)", borderRadius: "8px", padding: "20px" }}>
             <div style={{ fontSize: "12px", color: "var(--text-muted)", marginBottom: "8px" }}>{stat.label}</div>
@@ -87,7 +87,7 @@ export default async function AdminDashboard() {
                       {courseCode ? <span> for <strong>{courseCode}</strong></span> : null}
                     </div>
                     <div style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "3px" }}>
-                      {log.fromState ? `${log.fromState} -> ${log.toState}` : log.toState}
+                      {log.fromState ? `${log.fromState} → ${log.toState}` : log.toState}
                     </div>
                   </div>
                   <div style={{ fontSize: "12px", color: "var(--text-muted)", whiteSpace: "nowrap" }}>

@@ -46,6 +46,7 @@ export async function POST(req: Request) {
       capacity: z.number().int().positive(),
       scheduleJson: z.string(),
       instructorId: z.string().optional(),
+      groupLabel: z.string().optional(),
     }).safeParse(body)
     if (!parsed.success) return NextResponse.json({ error: "Invalid body" }, { status: 400 })
     const section = await db.section.create({ data: parsed.data })

@@ -17,13 +17,11 @@ export function OverridesClient({ overrides: initial, sections, prefillSectionId
   const [sectionId, setSectionId] = useState(prefillSectionId ?? "")
   const [reason, setReason] = useState("")
   const [submitting, setSubmitting] = useState(false)
-  const [msg, setMsg] = useState("")
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
     if (!sectionId) return
     setSubmitting(true)
-    setMsg("")
     try {
       const res = await fetch("/api/overrides", {
         method: "POST",
@@ -32,13 +30,12 @@ export function OverridesClient({ overrides: initial, sections, prefillSectionId
       })
       const data = await res.json()
       if (!res.ok) {
-        setMsg(data.error)
         toast.error(data.error)
       } else {
         const sec = sections.find(s => s.id === data.sectionId)
         setOverrides(ov => [{ id: data.id, sectionId: data.sectionId, courseCode: sec?.label.split(" ")[0] ?? "", reason: data.reason, status: data.status, createdAt: data.createdAt }, ...ov])
         setReason("")
-        setMsg("")
+        setSectionId("")
         toast.success("Override request submitted!")
       }
     } catch {
@@ -66,7 +63,6 @@ export function OverridesClient({ overrides: initial, sections, prefillSectionId
             <textarea value={reason} onChange={e => setReason(e.target.value)} required minLength={20} maxLength={500} rows={4}
               style={{ width: "100%", background: "rgba(255,255,255,0.02)", border: "1px solid var(--border)", borderRadius: "6px", padding: "8px 10px", color: "var(--text-secondary)", fontSize: "13px", resize: "vertical", boxSizing: "border-box" }} />
           </div>
-          {msg && <p style={{ fontSize: "13px", color: msg.includes("!") ? "var(--green)" : "#f87171", marginBottom: "8px" }}>{msg}</p>}
           <button type="submit" disabled={submitting}
             style={{ background: "var(--accent)", color: "var(--text-primary)", border: "none", borderRadius: "6px", padding: "8px 16px", fontSize: "13px", fontWeight: 510, cursor: submitting ? "wait" : "pointer", opacity: submitting ? 0.7 : 1, display: "inline-flex", alignItems: "center", gap: "6px" }}>
             {submitting ? <><Spinner size={13} color="white" /> Submitting…</> : "Submit Request"}
@@ -74,7 +70,11 @@ export function OverridesClient({ overrides: initial, sections, prefillSectionId
         </form>
       </div>
 
-      {overrides.length > 0 && (
+      {overrides.length === 0 ? (
+        <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "60px 40px", fontSize: "13px", background: "rgba(255,255,255,0.01)", border: "1px solid var(--border)", borderRadius: "8px" }}>
+          No override requests yet
+        </div>
+      ) : (
         <div style={{ background: "var(--bg-panel)", border: "1px solid var(--border)", borderRadius: "8px", overflow: "hidden" }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>

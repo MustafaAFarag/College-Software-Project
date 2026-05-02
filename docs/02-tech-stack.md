@@ -4,14 +4,15 @@
 
 | Layer | Choice | Reason |
 |-------|--------|--------|
-| Framework | Next.js 16 App Router | Single full-stack repo for pages, APIs, and route protection |
-| Language | TypeScript | Safer domain logic and Prisma integration |
-| Database | SQLite + Prisma ORM | Lightweight local setup for the college demo |
-| Authentication | NextAuth v5 credentials provider | Simple role-aware demo login |
-| UI | React components + `app/globals.css` + `react-toastify` | Fast iteration without a heavy design-system dependency |
-| Validation | Zod | Request validation on API boundaries |
-| PDF | `@react-pdf/renderer` | Server-generated transcript PDF export |
-| Testing | Vitest | Fast validator unit tests |
+| Framework | Next.js 16.2 App Router | Single full-stack repo for pages, APIs, and route protection |
+| Runtime | React 19.2 | Server Components + new hooks |
+| Language | TypeScript 5 | Safer domain logic and Prisma integration |
+| Database | SQLite + Prisma 6 | Lightweight local setup for the college demo |
+| Authentication | NextAuth v5 (beta) credentials provider | Simple role-aware demo login |
+| Styling | Tailwind v4 + `app/globals.css` + `react-toastify` | Fast iteration without a heavy design-system dependency |
+| Validation | Zod 4 | Request validation on API boundaries |
+| PDF | `@react-pdf/renderer` 4 | Server-generated transcript PDF export |
+| Testing | Vitest 4 | Fast validator unit tests |
 | Diagrams | draw.io | One maintained source file for all required models |
 
 ## Repository Structure

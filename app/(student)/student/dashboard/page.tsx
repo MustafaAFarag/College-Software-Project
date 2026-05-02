@@ -56,10 +56,13 @@ export default async function StudentDashboard() {
         </div>
       </div>
 
-      <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border)", borderRadius: "8px", padding: "16px 18px", marginBottom: "24px" }}>
-        <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "6px" }}>How to use the student flow</div>
-        <div style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.6 }}>
-          Register from <strong>Browse Courses</strong>, request exceptions from the inline override link when a section is blocked, and drop active sections from <strong>My Schedule</strong> before the drop deadline.
+      <div style={{ background: "rgba(94,106,210,0.06)", border: "1px solid var(--accent)", borderRadius: "8px", padding: "16px 18px", marginBottom: "24px", display: "flex", gap: "14px", alignItems: "flex-start" }}>
+        <div style={{ fontSize: "18px", flexShrink: 0, marginTop: "1px" }}>ℹ</div>
+        <div>
+          <div style={{ fontSize: "13px", fontWeight: 600, color: "var(--accent-bright)", marginBottom: "4px" }}>Quick Guide</div>
+          <div style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.6 }}>
+            Register from <strong>Browse Courses</strong>, request exceptions from the inline override link when a section is blocked, and drop active sections from <strong>My Schedule</strong> before the drop deadline.
+          </div>
         </div>
       </div>
 

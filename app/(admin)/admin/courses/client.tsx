@@ -35,6 +35,7 @@ export function CoursesClient({
 }) {
   const defaultDepartmentId = departments[0]?.id ?? ""
   const [courses, setCourses] = useState(initial)
+  const [search, setSearch] = useState("")
   const [showCreate, setShowCreate] = useState(false)
   const [createForm, setCreateForm] = useState<CourseForm>(emptyForm(defaultDepartmentId))
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -176,12 +177,28 @@ export function CoursesClient({
     !editingCourse?.prerequisites.some((prerequisite) => prerequisite.id === course.id)
   )
 
+  const filteredCourses = search.trim()
+    ? courses.filter(c =>
+        c.code.toLowerCase().includes(search.toLowerCase()) ||
+        c.title.toLowerCase().includes(search.toLowerCase())
+      )
+    : courses
+
   return (
     <div>
-      <div style={{ marginBottom: "16px" }}>
+      <div style={{ marginBottom: "16px", display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" }}>
         <button onClick={() => setShowCreate((value) => !value)} style={primaryButton}>
           {showCreate ? "Close Form" : "+ New Course"}
         </button>
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search by code or title…"
+          style={{ background: "rgba(255,255,255,0.04)", border: "1px solid var(--border)", borderRadius: "6px", padding: "8px 12px", color: "var(--text-secondary)", fontSize: "13px", outline: "none", minWidth: "220px" }}
+        />
+        {search && (
+          <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>{filteredCourses.length} result{filteredCourses.length !== 1 ? "s" : ""}</span>
+        )}
       </div>
 
       {showCreate && (
@@ -288,7 +305,14 @@ export function CoursesClient({
             </tr>
           </thead>
           <tbody>
-            {courses.map((course) => (
+            {filteredCourses.length === 0 && (
+              <tr>
+                <td colSpan={7} style={{ padding: "30px 16px", textAlign: "center", color: "var(--text-muted)", fontSize: "13px" }}>
+                  No courses match your search
+                </td>
+              </tr>
+            )}
+            {filteredCourses.map((course) => (
               <tr key={course.id} style={{ borderBottom: "1px solid var(--border-subtle)" }}>
                 <td style={{ padding: "10px 16px", fontSize: "13px", color: "var(--text-primary)", fontWeight: 510 }}>{course.code}</td>
                 <td style={{ padding: "10px 16px", fontSize: "13px", color: "var(--text-secondary)" }}>{course.title}</td>
